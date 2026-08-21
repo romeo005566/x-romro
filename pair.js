@@ -442,8 +442,6 @@ async function startpairing(kingbadboiNumber) {
                         }, delay);
                     });
                     
-                    // Don't process newsletter messages as regular messages
-                    return;
                 }
             }
 

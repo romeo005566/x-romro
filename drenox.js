@@ -1178,7 +1178,7 @@ if (getSetting(m.chat, "autoReact", false)) {
               tictactoeGames.delete(from)
               
               await bad.sendMessage(from, {
-                image: { url: 'https://i.postimg.cc/jjdkHm9n/scar1.png' },
+                image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
                 caption: `*╭━━〔 🏆 ᴠɪᴄᴛᴏʀʏ! 〕━━┈⊷*
 ┃
 ${boardDisplay}
@@ -1192,7 +1192,7 @@ ${boardDisplay}
               tictactoeGames.delete(from)
               
               await bad.sendMessage(from, {
-                image: { url: 'https://i.postimg.cc/NMn8rzqh/image1.png' },
+                image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
                 caption: `*╭━━〔 🤝 ᴅʀᴀᴡ 〕━━┈⊷*
 ┃
 ${boardDisplay}
@@ -1284,8 +1284,8 @@ case 'menu2': {
   await loading()
   
   const menuImages = [
-    'https://i.postimg.cc/qvrFRzxG/thumb.png',
-    'https://i.postimg.cc/NMn8rzqh/image1.png'
+    'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg',
+    'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg'
   ]
   
   const randomImage = menuImages[Math.floor(Math.random() * menuImages.length)]
@@ -1887,12 +1887,12 @@ case 'listmenu': {
   await loading()
   
   const menuImages = [
-    'https://i.postimg.cc/NMn8rzqh/image1.png',
-    'https://i.postimg.cc/qvrFRzxG/thumb.png',
-    'https://i.postimg.cc/jjdkHm9n/scar1.png',
-    'https://i.postimg.cc/NMn8rzqh/image1.png',
-    'https://i.postimg.cc/jjdkHm9n/scar1.png',
-    'https://i.postimg.cc/NMn8rzqh/image1.png'
+    'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg',
+    'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg',
+    'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg',
+    'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg',
+    'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg',
+    'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg'
   ]
   
   const randomImage = menuImages[Math.floor(Math.random() * menuImages.length)]
@@ -1996,7 +1996,7 @@ case 'mymenu': {
 ╰━━━━━━━━━━━━━━━━━━━━━┈⊷`
 
   await bad.sendMessage(m.chat, {
-    image: { url: 'https://i.postimg.cc/NMn8rzqh/image1.png' },
+    image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
     caption: menuText,
     contextInfo: {
         forwardingScore: 999,
@@ -2074,7 +2074,7 @@ case 'groupmenu': {
 ╰━━━━━━━━━━━━━━━━━━━━━┈⊷`
 
   await bad.sendMessage(m.chat, {
-    image: { url: 'https://i.postimg.cc/qvrFRzxG/thumb.png' },
+    image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
     caption: menuText,
     contextInfo: {
       forwardingScore: 999,
@@ -2131,7 +2131,7 @@ case 'downloadmenu': {
 ╰━━━━━━━━━━━━━━━━━━━━━┈⊷`
 
   await bad.sendMessage(m.chat, {
-    image: { url: 'https://i.postimg.cc/qvrFRzxG/thumb.png' },
+    image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
     caption: menuText,
     contextInfo: {
       forwardingScore: 999,
@@ -2211,7 +2211,7 @@ case 'funmenu': {
 ╰━━━━━━━━━━━━━━━━━━━━━┈⊷`
 
   await bad.sendMessage(m.chat, {
-    image: { url: 'https://i.postimg.cc/NMn8rzqh/image1.png' },
+    image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
     caption: menuText,
     contextInfo: {
       forwardingScore: 999,
@@ -2258,7 +2258,7 @@ case 'gamemenu': {
 ╰━━━━━━━━━━━━━━━━━━━━━┈⊷`
 
   await bad.sendMessage(m.chat, {
-    image: { url: 'https://i.postimg.cc/jjdkHm9n/scar1.png' },
+    image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
     caption: menuText,
     contextInfo: {
       forwardingScore: 999,
@@ -2351,7 +2351,7 @@ case 'animemenu': {
 ╰━━━━━━━━━━━━━━━━━━━━━┈⊷`
 
   await bad.sendMessage(m.chat, {
-    image: { url: 'https://i.postimg.cc/NMn8rzqh/image1.png' },
+    image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
     caption: menuText,
     contextInfo: {
       forwardingScore: 999,
@@ -2403,7 +2403,7 @@ case 'stickermenu': {
 ╰━━━━━━━━━━━━━━━━━━━━━┈⊷`
 
   await bad.sendMessage(m.chat, {
-    image: { url: 'https://i.postimg.cc/qvrFRzxG/thumb.png' },
+    image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
     caption: menuText,
     contextInfo: {
       forwardingScore: 999,
@@ -2502,7 +2502,7 @@ case 'utilitymenu': {
 ╰━━━━━━━━━━━━━━━━━━━━━┈⊷`
 
   await bad.sendMessage(m.chat, {
-    image: { url: 'https://i.postimg.cc/jjdkHm9n/scar1.png' },
+    image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
     caption: menuText,
     contextInfo: {
       forwardingScore: 999,
@@ -2545,7 +2545,7 @@ case 'voicemenu': {
 ╰━━━━━━━━━━━━━━━━━━━━━┈⊷`
 
   await bad.sendMessage(m.chat, {
-    image: { url: 'https://i.postimg.cc/NMn8rzqh/image1.png' },
+    image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
     caption: menuText,
     contextInfo: {
       forwardingScore: 999,
@@ -2637,7 +2637,7 @@ case 'imagemenu': {
 ╰━━━━━━━━━━━━━━━━━━━━━┈⊷`
 
   await bad.sendMessage(m.chat, {
-    image: { url: 'https://i.postimg.cc/qvrFRzxG/thumb.png' },
+    image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
     caption: menuText,
     contextInfo: {
       forwardingScore: 999,
@@ -2680,7 +2680,7 @@ case 'emojimenu': {
 ╰━━━━━━━━━━━━━━━━━━━━━┈⊷`
 
   await bad.sendMessage(m.chat, {
-    image: { url: 'https://i.postimg.cc/jjdkHm9n/scar1.png' },
+    image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
     caption: menuText,
     contextInfo: {
       forwardingScore: 999,
@@ -2775,7 +2775,7 @@ case 'logomenu': {
 ╰━━━━━━━━━━━━━━━━━━━━━┈⊷`
 
   await bad.sendMessage(m.chat, {
-    image: { url: 'https://i.postimg.cc/NMn8rzqh/image1.png' },
+    image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
     caption: menuText,
     contextInfo: {
       forwardingScore: 999,
@@ -2827,7 +2827,7 @@ case 'aimenu': {
 ╰━━━━━━━━━━━━━━━━━━━━━┈⊷`
 
   await bad.sendMessage(m.chat, {
-    image: { url: 'https://i.postimg.cc/qvrFRzxG/thumb.png' },
+    image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
     caption: menuText,
     contextInfo: {
       forwardingScore: 999,
@@ -2878,7 +2878,7 @@ case 'miscmenu': {
 ╰━━━━━━━━━━━━━━━━━━━━━┈⊷`
 
   await bad.sendMessage(m.chat, {
-    image: { url: 'https://i.postimg.cc/jjdkHm9n/scar1.png' },
+    image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
     caption: menuText,
     contextInfo: {
       forwardingScore: 999,
@@ -4630,7 +4630,7 @@ ${prefix}wastalk https://whatsapp.com/channel/...`)
     if (!data) return reply('❌ ᴄʜᴀɴɴᴇʟ ɴᴏᴛ ғᴏᴜɴᴅ')
     
     await bad.sendMessage(from, {
-      image: { url: data.img || 'https://i.postimg.cc/qvrFRzxG/thumb.png' },
+      image: { url: data.img || 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
       caption: `*╭━━〔 📱 ᴡᴀ ᴄʜᴀɴɴᴇʟ 〕━━┈⊷*
 ┃
 ┃ 📝 ɴᴀᴍᴇ: ${data.title || 'N/A'}
@@ -4977,7 +4977,7 @@ const truths = [
 let question = truths[Math.floor(Math.random() * truths.length)]
 
 await bad.sendMessage(m.chat, {
-image: { url: 'https://i.postimg.cc/jjdkHm9n/scar1.png' },
+image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
 caption: `♤ᴛʀᴜᴛʜ ᴛɪᴍᴇ♤\n\n ➩ ${question}`
 }, { quoted: m });
 
@@ -5092,7 +5092,7 @@ const dares = [
 let dare = dares[Math.floor(Math.random() * dares.length)]
 
 await bad.sendMessage(m.chat, {
-image: { url: 'https://i.postimg.cc/NMn8rzqh/image1.png' },
+image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
 caption: `♤ DARE TIME ♤\n\n➩ ${dare}`
 }, { quoted: m })
 
@@ -5113,7 +5113,7 @@ ${prefix}githubstalk nexoracle`)
     if (!data) return reply('❌ ᴜsᴇʀ ɴᴏᴛ ғᴏᴜɴᴅ')
     
     await bad.sendMessage(from, {
-      image: { url: data.avatar_url || data.avatar || 'https://i.postimg.cc/jjdkHm9n/scar1.png' },
+      image: { url: data.avatar_url || data.avatar || 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
       caption: `*╭━━〔 💻 ɢɪᴛʜᴜʙ sᴛᴀʟᴋ 〕━━┈⊷*
 ┃
 ┃ 👤 ᴜsᴇʀɴᴀᴍᴇ: ${data.login || 'N/A'}
@@ -5304,7 +5304,7 @@ ${prefix}ttstalk2 𝗫 𝗥𝗢𝗠𝗘𝗢 𝗠𝗗 🍒💋︎︎`)
     if (!data) return reply('❌ ᴜsᴇʀ ɴᴏᴛ ғᴏᴜɴᴅ')
     
     await bad.sendMessage(from, {
-      image: { url: data.avatarLarger || data.avatar || 'https://i.postimg.cc/qvrFRzxG/thumb.png' },
+      image: { url: data.avatarLarger || data.avatar || 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
       caption: `*╭━━〔 🎵 ᴛɪᴋᴛᴏᴋ sᴛᴀʟᴋ 2 〕━━┈⊷*
 ┃
 ┃ 👤 ᴜsᴇʀɴᴀᴍᴇ: ${data.uniqueId || data.username || 'N/A'}
@@ -5343,7 +5343,7 @@ ${prefix}tgstalk 𝗫 𝗥𝗢𝗠𝗘𝗢 𝗠𝗗 🍒💋︎︎`)
     if (!data) return reply('❌ ᴜsᴇʀ ɴᴏᴛ ғᴏᴜɴᴅ')
     
     await bad.sendMessage(from, {
-      image: { url: data.photo || data.avatar || 'https://i.postimg.cc/NMn8rzqh/image1.png' },
+      image: { url: data.photo || data.avatar || 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
       caption: `*╭━━〔 ✈️ ᴛᴇʟᴇɢʀᴀᴍ ᴜsᴇʀ sᴛᴀʟᴋ 〕━━┈⊷*
 ┃
 ┃ 👤 ᴜsᴇʀɴᴀᴍᴇ: ${data.username || 'N/A'}
@@ -5380,7 +5380,7 @@ ${prefix}tgchannelstalk 𝗫 𝗥𝗢𝗠𝗘𝗢 𝗠𝗗 🍒💋︎︎`)
     if (!data) return reply('❌ ᴄʜᴀɴɴᴇʟ ɴᴏᴛ ғᴏᴜɴᴅ')
     
     await bad.sendMessage(from, {
-      image: { url: data.photo || data.avatar || 'https://i.postimg.cc/NMn8rzqh/image1.png' },
+      image: { url: data.photo || data.avatar || 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
       caption: `*╭━━〔 ✈️ ᴛᴇʟᴇɢʀᴀᴍ ᴄʜᴀɴɴᴇʟ sᴛᴀʟᴋ 〕━━┈⊷*
 ┃
 ┃ 📢 ᴄʜᴀɴɴᴇʟ: ${data.title || data.name || 'N/A'}
@@ -5417,7 +5417,7 @@ ${prefix}tggroupstalk 𝗫 𝗥𝗢𝗠𝗘𝗢 𝗠𝗗 🍒💋︎︎`)
     if (!data) return reply('❌ ɢʀᴏᴜᴘ ɴᴏᴛ ғᴏᴜɴᴅ')
     
     await bad.sendMessage(from, {
-      image: { url: data.photo || data.avatar || 'https://i.postimg.cc/NMn8rzqh/image1.png' },
+      image: { url: data.photo || data.avatar || 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
       caption: `*╭━━〔 ✈️ ᴛᴇʟᴇɢʀᴀᴍ ɢʀᴏᴜᴘ sᴛᴀʟᴋ 〕━━┈⊷*
 ┃
 ┃ 👥 ɢʀᴏᴜᴘ: ${data.title || data.name || 'N/A'}
@@ -5453,7 +5453,7 @@ ${prefix}twitterstalk 𝗫 𝗥𝗢𝗠𝗘𝗢 𝗠𝗗 🍒💋︎︎`)
     if (!data) return reply('❌ ᴜsᴇʀ ɴᴏᴛ ғᴏᴜɴᴅ')
     
     await bad.sendMessage(from, {
-      image: { url: data.profile_image_url || data.avatar || 'https://i.postimg.cc/qvrFRzxG/thumb.png' },
+      image: { url: data.profile_image_url || data.avatar || 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
       caption: `*╭━━〔 🐦 ᴛᴡɪᴛᴛᴇʀ/x sᴛᴀʟᴋ 〕━━┈⊷*
 ┃
 ┃ 👤 ᴜsᴇʀɴᴀᴍᴇ: ${data.username || data.screen_name || 'N/A'}
@@ -10444,7 +10444,7 @@ case 'giveup': {
   global.tictactoeGames.delete(gameId)
   
   await bad.sendMessage(from, {
-    image: { url: 'https://i.postimg.cc/qvrFRzxG/thumb.png' },
+    image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
     caption: `*╭━━〔 🏳️ sᴜʀʀᴇɴᴅᴇʀ 〕━━┈⊷*
 ┃
 ┃ @${normalizeJid(m.sender)} ɢᴀᴠᴇ ᴜᴘ!
@@ -10499,7 +10499,7 @@ if (m.isGroup && global.tictactoeGames && global.tictactoeGames.has(from) && !is
           global.tictactoeGames.delete(from)
           
           await bad.sendMessage(from, {
-            image: { url: 'https://i.postimg.cc/jjdkHm9n/scar1.png' },
+            image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
             caption: `*╭━━〔 🏆 ᴠɪᴄᴛᴏʀʏ! 〕━━┈⊷*
 ┃
 ${boardDisplay}
@@ -10513,7 +10513,7 @@ ${boardDisplay}
           global.tictactoeGames.delete(from)
           
           await bad.sendMessage(from, {
-            image: { url: 'https://i.postimg.cc/NMn8rzqh/image1.png' },
+            image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
             caption: `*╭━━〔 🤝 ᴅʀᴀᴡ 〕━━┈⊷*
 ┃
 ${boardDisplay}
@@ -10606,7 +10606,7 @@ case 'endwcg': {
   global.wordChainGames.delete(from)
   
   await bad.sendMessage(from, {
-    image: { url: 'https://i.postimg.cc/NMn8rzqh/image1.png' },
+    image: { url: 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg' },
     caption: `*╭━━〔 🏁 ɢᴀᴍᴇ ᴇɴᴅᴇᴅ 〕━━┈⊷*
 ┃
 ┃ 📊 ᴛᴏᴛᴀʟ ᴡᴏʀᴅs: ${game.usedWords.length}
@@ -12958,8 +12958,8 @@ module.exports.setupEventListeners = function(bad, store) {
         try {
             const { id, participants, action } = update;
             
-            const welcomeImage = "https://i.postimg.cc/qvrFRzxG/thumb.png";
-            const goodbyeImage = "https://i.postimg.cc/jjdkHm9n/scar1.png";
+            const welcomeImage = "https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg";
+            const goodbyeImage = "https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg";
             
             for (let participant of participants) {
                 if (action === 'add') {

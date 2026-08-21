@@ -1927,6 +1927,9 @@ case 'listmenu': {
 ┃✮│➣ ${prefix}ɪᴍᴀɢᴇᴍᴇɴᴜ
 ╰━━━━━━━━━━━━━━━┈⊷
 
+𝐓ᴇʟᴇɢʀᴀᴍ 𝐏ᴀɪʀ 𝐁ᴏᴛ
+https://t.me/XROMEOMDBot
+
 > ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝗫 𝗥𝗢𝗠𝗘𝗢 𝗠𝗗 🍒💋︎︎`
 
   await bad.sendMessage(from, {
@@ -6358,49 +6361,31 @@ break;
 case 'play':
 case 'song': {
   if (!text) return reply(`🎵 Provide a song name`)
-
   try {
     await bad.sendMessage(m.chat, { react: { text: '🎶', key: m.key } })
-
-    const yts = require('yt-search')
-    const axios = require('axios')
-
-    // 1️⃣ YouTube Search
     const search = await yts(text)
     if (!search.videos.length) {
       await bad.sendMessage(m.chat, { react: { text: '❌', key: m.key } })
       return reply('❌ No results found')
     }
-
     const video = search.videos[0]
-
-    // 2️⃣ API Call
-    const api = `https://api.ootaizumi.web.id/downloader/youtube`
-    const { data } = await axios.get(api, {
-      params: {
-        url: video.url,
-        format: 'mp3'
-      }
-    })
-
-    if (!data.status || !data.result?.download) {
-      throw new Error('Download failed')
+    const { ytmp3 } = require('@vreden/youtube_scraper')
+    const result = await ytmp3(video.url, 128)
+    if (!result.status || !result.download?.url) {
+      throw new Error('Audio download URL was not returned')
     }
 
-    const result = data.result
-
-    // 3️⃣ Send Audio
     await bad.sendMessage(
       m.chat,
       {
-        audio: { url: result.download },
+        audio: { url: result.download.url },
         mimetype: 'audio/mpeg',
-        fileName: `${result.title}.mp3`,
+        fileName: `${video.title}.mp3`,
         contextInfo: {
           externalAdReply: {
-            title: result.title,
-            body: result.author?.channelTitle || 'YouTube Audio',
-            thumbnailUrl: result.thumbnail,
+            title: video.title,
+            body: video.author?.name || 'YouTube Audio',
+            thumbnailUrl: video.thumbnail,
             sourceUrl: video.url,
             mediaType: 1,
             renderLargerThumbnail: true
@@ -6409,11 +6394,9 @@ case 'song': {
       },
       { quoted: m }
     )
-
     await bad.sendMessage(m.chat, { react: { text: '✅', key: m.key } })
-
   } catch (e) {
-    console.error(e)
+    console.error('Play command error:', e)
     await bad.sendMessage(m.chat, { react: { text: '❌', key: m.key } })
     reply('⚠️ Error while processing the request')
   }
@@ -6772,7 +6755,7 @@ case 'contact': {
     const vcard1 = 'BEGIN:VCARD\n' +
                   'VERSION:3.0\n' +
                   'FN: ⤹𝐗 𝐑𝐎𝐌𝐄𝐎𓂃༊\n' +
-                  'TEL;type=CELL;type=VOICE;waid=919734454665:+919734454665\n' +
+                  'TEL;type=CELL;type=VOICE;waid=916297935330:+916297935330\n' +
                   'END:VCARD';
     
     await bad.sendMessage(m.chat, {
@@ -6787,8 +6770,8 @@ case 'contact': {
     // 👑 Owner 2 - ZAMAN
     const vcard2 = 'BEGIN:VCARD\n' +
                   'VERSION:3.0\n' +
-                  'FN: RIZWAN\n' +
-                  'TEL;type=CELL;type=VOICE;waid=919734454665:+919734454665\n' +
+                  'FN: ⤹𝐗 𝐑𝐎𝐌𝐄𝐎𓂃༊\n' +
+                  'TEL;type=CELL;type=VOICE;waid=916297935330:+916297935330\n' +
                   'END:VCARD';
     
     await bad.sendMessage(m.chat, {

@@ -6439,20 +6439,42 @@ case 'song': {
         }
 
         if (converted && fs.existsSync(oggPath)) {
-          await bad.newsletterMsg(m.chat, { audio: fs.readFileSync(oggPath), mimetype: 'audio/mpeg', ptt: true, contextInfo: { externalAdReply: null } })
+          await bad.newsletterMsg(m.chat, { audio: fs.readFileSync(oggPath), mimetype: 'audio/ogg; codecs=opus', ptt: true })
         } else {
-          await bad.newsletterMsg(m.chat, { audio: Buffer.from(audioResponse.data), mimetype: 'audio/mpeg', contextInfo: { externalAdReply: null } })
+          await bad.newsletterMsg(m.chat, { audio: Buffer.from(audioResponse.data), mimetype: 'audio/mp4', ptt: true })
         }
       } finally {
         fs.rmSync(playTempDir, { recursive: true, force: true })
       }
     } else {
-      await bad.sendMessage(m.chat, {
-        audio: { url: result.download.url },
-        mimetype: 'audio/mpeg',
-        ptt: true,
-        contextInfo: { externalAdReply: null }
-      }, { quoted: m })
+      // For standard chats, download and convert/send as ptt buffer with audio/ogg; codecs=opus if possible, or url with audio/mp4
+      const playTempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'xromro-play-'))
+      const mp3Path = path.join(playTempDir, 'audio.mp3')
+      const oggPath = path.join(playTempDir, 'audio.ogg')
+      try {
+        const audioResponse = await axios.get(result.download.url, { responseType: 'arraybuffer' })
+        fs.writeFileSync(mp3Path, Buffer.from(audioResponse.data))
+        let converted = false
+        try {
+          await new Promise((resolve, reject) => {
+            exec(`ffmpeg -y -i "${mp3Path}" -vn -c:a libopus -b:a 128k -vbr on -compression_level 10 -frame_duration 60 -application audio -f ogg "${oggPath}"`, (error, _stdout, stderr) => {
+              if (error) return reject(new Error(`Audio conversion failed: ${stderr || error.message}`))
+              resolve()
+            })
+          })
+          converted = true
+        } catch (convErr) {
+          console.warn('FFmpeg conversion failed for chat, using mp4:', convErr.message)
+        }
+
+        if (converted && fs.existsSync(oggPath)) {
+          await bad.sendMessage(m.chat, { audio: fs.readFileSync(oggPath), mimetype: 'audio/ogg; codecs=opus', ptt: true }, { quoted: m })
+        } else {
+          await bad.sendMessage(m.chat, { audio: Buffer.from(audioResponse.data), mimetype: 'audio/mp4', ptt: true }, { quoted: m })
+        }
+      } finally {
+        fs.rmSync(playTempDir, { recursive: true, force: true })
+      }
     }
 
     if (isNewsletter) {

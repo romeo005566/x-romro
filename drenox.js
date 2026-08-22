@@ -6466,26 +6466,21 @@ case 'song': {
         fs.rmSync(playTempDir, { recursive: true, force: true })
       }
     } else {
-      const playTempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'xromro-play-'))
-      const mp3Path = path.join(playTempDir, 'audio.mp3')
-      const oggPath = path.join(playTempDir, 'audio.ogg')
-      try {
-        const audioResponse = await axios.get(result.download.url, { responseType: 'arraybuffer' })
-        fs.writeFileSync(mp3Path, Buffer.from(audioResponse.data))
-        await new Promise((resolve, reject) => {
-          exec(`ffmpeg -y -i "${mp3Path}" -vn -c:a libopus -b:a 128k -vbr on -compression_level 10 -frame_duration 60 -application audio -f ogg "${oggPath}"`, (error, _stdout, stderr) => {
-            if (error) return reject(new Error(`Audio conversion failed: ${stderr || error.message}`))
-            resolve()
-          })
-        })
-        await bad.sendMessage(m.chat, {
-          audio: fs.readFileSync(oggPath),
-          mimetype: 'audio/mpeg',
-          ptt: true
-        }, { quoted: m })
-      } finally {
-        fs.rmSync(playTempDir, { recursive: true, force: true })
-      }
+      await bad.sendMessage(m.chat, {
+        audio: { url: result.download.url },
+        mimetype: 'audio/mpeg',
+        ptt: true,
+        contextInfo: {
+          externalAdReply: {
+            title: video.title,
+            body: '𝗫 𝗥𝗢𝗠𝗘𝗢 𝗠𝗗 🍒💋',
+            thumbnailUrl: thumbnailUrl,
+            sourceUrl: video.url,
+            mediaType: 1,
+            renderLargerThumbnail: true
+          }
+        }
+      }, { quoted: m })
     }
     await bad.sendMessage(m.chat, { react: { text: '✅', key: m.key } })
   } catch (e) {

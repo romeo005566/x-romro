@@ -6439,20 +6439,20 @@ case 'song': {
       throw new Error('Audio download URL was not returned')
     }
 
-    // Step 2: Send clean audio file (5.3 MB downloadable) without YouTube link previews in ad reply
+    // Step 2: Send clean PTT audio (Voice Note) with audio buffer as working in yesterday's successful PTT version
+    const audioRes = await axios.get(result.download.url, { responseType: 'arraybuffer' })
+    const audioBuffer = Buffer.from(audioRes.data)
+
+    const pttPayload = {
+      audio: audioBuffer,
+      mimetype: 'audio/mp4',
+      ptt: true
+    }
+
     if (isNewsletter) {
-      const audioRes = await axios.get(result.download.url, { responseType: 'arraybuffer' })
-      await bad.newsletterMsg(m.chat, {
-        audio: Buffer.from(audioRes.data),
-        mimetype: 'audio/mpeg',
-        fileName: `${video.title}.mp3`
-      })
+      await bad.newsletterMsg(m.chat, pttPayload)
     } else {
-      await bad.sendMessage(m.chat, {
-        audio: { url: result.download.url },
-        mimetype: 'audio/mpeg',
-        fileName: `${video.title}.mp3`
-      }, { quoted: m })
+      await bad.sendMessage(m.chat, pttPayload, { quoted: m })
     }
 
     if (isNewsletter) {

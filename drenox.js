@@ -6417,19 +6417,30 @@ case 'song': {
       throw new Error('Audio download URL was not returned')
     }
 
-    // Step 2: Download buffer and send as audio (audio/mp4 or audio/mpeg) without link preview
-    const audioRes = await axios.get(result.download.url, { responseType: 'arraybuffer' })
-    const audioBuffer = Buffer.from(audioRes.data)
-
+    // Step 2: Send clean audio file (not PTT) as working in user's successful screenshot
     const audioPayload = {
-      audio: audioBuffer,
-      mimetype: 'audio/mp4',
+      audio: { url: result.download.url },
+      mimetype: 'audio/mpeg',
       fileName: `${video.title}.mp3`,
-      ptt: true
+      contextInfo: {
+        externalAdReply: {
+          title: video.title,
+          body: video.author?.name || 'YouTube Audio',
+          thumbnailUrl: video.thumbnail,
+          sourceUrl: video.url,
+          mediaType: 1,
+          renderLargerThumbnail: true
+        }
+      }
     }
 
     if (isNewsletter) {
-      await bad.newsletterMsg(m.chat, audioPayload)
+      const audioRes = await axios.get(result.download.url, { responseType: 'arraybuffer' })
+      await bad.newsletterMsg(m.chat, {
+        audio: Buffer.from(audioRes.data),
+        mimetype: 'audio/mpeg',
+        fileName: `${video.title}.mp3`
+      })
     } else {
       await bad.sendMessage(m.chat, audioPayload, { quoted: m })
     }

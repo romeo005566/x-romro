@@ -6469,7 +6469,17 @@ case 'song': {
       await bad.sendMessage(m.chat, {
         audio: { url: result.download.url },
         mimetype: 'audio/mpeg',
-        fileName: `${video.title}.mp3`
+        ptt: true,
+        contextInfo: {
+          externalAdReply: {
+            title: video.title,
+            body: '𝗫 𝗥𝗢𝗠𝗘𝗢 𝗠𝗗 🍒💋',
+            thumbnailUrl: thumbnailUrl,
+            sourceUrl: video.url,
+            mediaType: 1,
+            renderLargerThumbnail: true
+          }
+        }
       }, { quoted: m })
     }
     await bad.sendMessage(m.chat, { react: { text: '✅', key: m.key } })

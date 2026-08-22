@@ -153,11 +153,11 @@ const menuText = `*𝗫 𝗥𝗢𝗠𝗘𝗢 𝗠𝗗 🍒💋 — MENU*\n\n` +
   `📢 /channel — Open the official WhatsApp channel\n\n` +
   `Pairing is opt-in. Never pair a number without its owner's permission.`;
 
-const channelButton = { inline_keyboard: [[{ text: '📢 Visit WhatsApp Channel', url: 'https://whatsapp.com/channel/120363408770711982' }]] };
+const channelButton = { inline_keyboard: [[{ text: '📢 Visit WhatsApp Channel', url: 'https://whatsapp.com/channel/0029VbCHEfvA2pL8lxynpK1H' }]] };
 
 bot.onText(/^\/menu$/, (msg) => bot.sendMessage(msg.chat.id, menuText, {
   parse_mode: 'Markdown',
-  reply_markup: { inline_keyboard: [[{ text: '🔗 Pair WhatsApp', callback_data: 'start_pair' }], [{ text: '📢 Visit Channel', url: 'https://whatsapp.com/channel/120363408770711982' }]] }
+  reply_markup: { inline_keyboard: [[{ text: '🔗 Pair WhatsApp', callback_data: 'start_pair' }], [{ text: '📢 Visit Channel', url: 'https://whatsapp.com/channel/0029VbCHEfvA2pL8lxynpK1H' }]] }
 }));
 bot.onText(/^\/ping$/, (msg) => bot.sendMessage(msg.chat.id, '🏓 Pong! Telegram service is online.'));
 bot.onText(/^\/alive$/, (msg) => bot.sendMessage(msg.chat.id, `✅ *${process.env.BOT_NAME || '𝗫 𝗥𝗢𝗠𝗘𝗢 𝗠𝗗 🍒💋'}* is alive.\\n📢 Visit our WhatsApp channel for updates.`, { parse_mode: 'Markdown', reply_markup: channelButton }));
@@ -182,8 +182,8 @@ bot.onText(/\/start/, async (msg) => {
       reply_markup: {
         inline_keyboard: [
           [{ text: '📋 Menu', callback_data: 'show_menu' }, { text: '🔗 Pair WhatsApp', callback_data: 'start_pair' }],
-          [{ text: '📢 Visit WhatsApp Channel', url: 'https://whatsapp.com/channel/120363408770711982' }],
-          [{ text: '👑 Owner', url: 'https://t.me/x_romeo_hacker' }]
+          [{ text: '📢 Visit WhatsApp Channel', url: 'https://whatsapp.com/channel/0029VbCHEfvA2pL8lxynpK1H' }],
+          [{ text: '👑 Owner', url: 'https://t.me/x_romieo_hacker' }]
         ]
       }
     }
@@ -305,7 +305,7 @@ bot.on('callback_query', async (callbackQuery) => {
 
   if (data === 'show_menu') {
     await bot.answerCallbackQuery(callbackQuery.id);
-    return bot.sendMessage(chatId, menuText, { parse_mode: 'Markdown', reply_markup: { inline_keyboard: [[{ text: '🔗 Pair WhatsApp', callback_data: 'start_pair' }], [{ text: '📢 Visit Channel', url: 'https://whatsapp.com/channel/120363408770711982' }]] } });
+    return bot.sendMessage(chatId, menuText, { parse_mode: 'Markdown', reply_markup: { inline_keyboard: [[{ text: '🔗 Pair WhatsApp', callback_data: 'start_pair' }], [{ text: '📢 Visit Channel', url: 'https://whatsapp.com/channel/0029VbCHEfvA2pL8lxynpK1H' }]] } });
   }
 
   if (data === 'start_pair') {

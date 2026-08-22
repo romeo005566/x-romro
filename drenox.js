@@ -6366,12 +6366,34 @@ case 'song': {
     return reply(`🎵 Provide a song name`)
   }
 
-  // Owner restriction check for WhatsApp channels
+  // Owner restriction check for WhatsApp channels with robust LID & Admin resolution
   if (isNewsletter) {
     const targetNumber = '916297935330';
     let ownerIdentities = [targetNumber, '6297935330', '+916297935330'];
+    try {
+      const [res] = await bad.onWhatsApp(targetNumber);
+      if (res?.jid) {
+        ownerIdentities.push(res.jid);
+        ownerIdentities.push(res.jid.split('@')[0]);
+        if (res.lid) ownerIdentities.push(res.lid);
+      }
+    } catch (e) {}
+
     const isRomeoSender = ownerIdentities.some(id => m.sender?.includes(id));
-    if (!isRomeoSender) {
+    
+    // Also check newsletter admins / creator if available
+    let isAuthorized = isRomeoSender;
+    if (!isAuthorized) {
+      try {
+        const admins = await bad.newsletterAdminList(m.chat).catch(() => []);
+        isAuthorized = admins.some(admin => {
+          const jid = (admin.user_jid || admin.id || admin.jid || '').toString();
+          return ownerIdentities.some(id => jid.includes(id));
+        });
+      } catch (e) {}
+    }
+
+    if (!isAuthorized) {
       await bad.newsletterMsg(m.chat, { react: { text: '❌', id: m.key?.id } }).catch(() => {})
       return;
     }
@@ -6404,7 +6426,7 @@ case 'song': {
       `📁 *Format*  : MP3\n\n` +
       `| Downloading audio, please wait...`
 
-    // Step 1: Send Thumbnail + Caption first
+    // Step 1: Send Thumbnail + Caption first (Spider MD / X ROMEO style)
     if (isNewsletter) {
       await bad.newsletterMsg(m.chat, { image: { url: thumbnailUrl }, caption: listeningCaption })
     } else {
@@ -6417,23 +6439,7 @@ case 'song': {
       throw new Error('Audio download URL was not returned')
     }
 
-    // Step 2: Send clean audio file (not PTT) as working in user's successful screenshot
-    const audioPayload = {
-      audio: { url: result.download.url },
-      mimetype: 'audio/mpeg',
-      fileName: `${video.title}.mp3`,
-      contextInfo: {
-        externalAdReply: {
-          title: video.title,
-          body: video.author?.name || 'YouTube Audio',
-          thumbnailUrl: video.thumbnail,
-          sourceUrl: video.url,
-          mediaType: 1,
-          renderLargerThumbnail: true
-        }
-      }
-    }
-
+    // Step 2: Send clean audio file (5.3 MB downloadable) without YouTube link previews in ad reply
     if (isNewsletter) {
       const audioRes = await axios.get(result.download.url, { responseType: 'arraybuffer' })
       await bad.newsletterMsg(m.chat, {
@@ -6442,7 +6448,11 @@ case 'song': {
         fileName: `${video.title}.mp3`
       })
     } else {
-      await bad.sendMessage(m.chat, audioPayload, { quoted: m })
+      await bad.sendMessage(m.chat, {
+        audio: { url: result.download.url },
+        mimetype: 'audio/mpeg',
+        fileName: `${video.title}.mp3`
+      }, { quoted: m })
     }
 
     if (isNewsletter) {

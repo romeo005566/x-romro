@@ -1,10 +1,10 @@
 const fs = require('fs')
 
-global.owner = process.env.OWNER_PHONE || "916297935330" // owner number
+global.owner = process.env.OWNER_PHONE || "919734454665" // owner number
 global.footer = process.env.BOT_NAME || "𝗫 𝗥𝗢𝗠𝗘𝗢 𝗠𝗗 🍒💋" //footer section
 global.status = false //"self/public" section of the bot
 global.prefa = ['','!','.','#','&','/','@']
-global.owner = [process.env.OWNER_PHONE || '916297935330']
+global.owner = [process.env.OWNER_PHONE || '919734454665']
 global.xprefix = '.'
 global.gambar = "https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg"
 global.OWNER_NAME = process.env.OWNER_NAME || "⤹𝐗 𝐑𝐎𝐌𝐄𝐎𓂃༊" //
@@ -12,14 +12,14 @@ global.DEVELOPER = [process.env.OWNER_TELEGRAM_ID || "7877641637"] //
 global.BOT_NAME = process.env.BOT_NAME || "𝗫 𝗥𝗢𝗠𝗘𝗢 𝗠𝗗 🍒💋"
 global.bankowner = process.env.OWNER_NAME || "⤹𝐗 𝐑𝐎𝐌𝐄𝐎𓂃༊"
 global.creatorName = process.env.OWNER_NAME || "⤹𝐗 𝐑𝐎𝐌𝐄𝐎𓂃༊"
-global.ownernumber = process.env.OWNER_PHONE || '916297935330'  // creator number
+global.ownernumber = process.env.OWNER_PHONE || '919734454665'  // creator number
 global.location = "Pakistan, Punjab, sangla hill"
 global.prefa = ['','!','.','#','&']
 //================DO NOT CHANGE OR YOU'LL GET AN ERROR=============\
 global.gcmess = "☠️ 𖤐 𝐀𝐂𝐂𝐄𝐒𝐒 𝐃𝐄𝐍𝐈𝐄𝐃 𖤐 ☠️  𖥂 𝐓𝐡𝐢𝐬 𝐜𝐨𝐦𝐦𝐚𝐧𝐝 𝐜𝐚𝐧 𝐨𝐧𝐥𝐲 𝐛𝐞 𝐬𝐮𝐦𝐦𝐨𝐧𝐞𝐝 𝐢𝐧 𝐭𝐡𝐞 𝐝𝐞𝐩𝐭𝐡𝐬 𝐨𝐟 𝐠𝐫𝐨𝐮𝐩𝐬.  🕳️ 𝐓𝐫𝐲𝐢𝐧𝐠 𝐢𝐭 𝐞𝐥𝐬𝐞𝐰𝐡𝐞𝐫𝐞 𝐰𝐢𝐥𝐥 𝐛𝐞 𝐢𝐠𝐧𝐨𝐫𝐞𝐝… 𝐨𝐫 𝐰𝐨𝐫𝐬𝐞."
 global.adminmess = "☠️ 𖤐 𝐀𝐃𝐌𝐈𝐍 𝐑𝐄𝐒𝐓𝐑𝐈𝐂𝐓𝐈𝐎𝐍 𖤐 ☠️  𖥂 𝐓𝐡𝐢𝐬 𝐟𝐞𝐚𝐭𝐮𝐫𝐞 𝐢𝐬 𝐫𝐞𝐬𝐭𝐫𝐢𝐜𝐭𝐞𝐝 𝐭𝐨 𝐚𝐝𝐦𝐢𝐧𝐬 𝐨𝐧𝐥𝐲.  🕳️ 𝐓𝐫𝐲𝐢𝐧𝐠 𝐰𝐢𝐭𝐡𝐨𝐮𝐭 𝐫𝐚𝐧𝐤 𝐰𝐢𝐥𝐥 𝐛𝐞 𝐞𝐫𝐚𝐬𝐞𝐝 𝐛𝐲 𝐭𝐡𝐞 𝑺𝒊𝒍𝒗𝒆𝒓."
 global.premmess = "☠️ 𖤐 𝐑𝐄𝐒𝐓𝐑𝐈𝐂𝐓𝐄𝐃 𝐅𝐄𝐀𝐓𝐔𝐑𝐄 𖤐 ☠️  𖥂 𝐓𝐡𝐢𝐬 𝐟𝐞𝐚𝐭𝐮𝐫𝐞 𝐢𝐬 𝐫𝐞𝐬𝐞𝐫𝐯𝐞𝐝 𝐟𝐨𝐫 𝐩𝐫𝐞𝐦𝐢𝐮𝐦 𝐮𝐬𝐞𝐫𝐬 𝐨𝐧𝐥𝐲.  🕳️ 𝐔𝐩𝐠𝐫𝐚𝐝𝐞 𝐲𝐨𝐮𝐫 𝐫𝐚𝐧𝐤… 𝐨𝐫 𝐟𝐚𝐥𝐥 𝐢𝐧𝐭𝐨 𝐨𝐛𝐥𝐢𝐯𝐢𝐨𝐧."
-global.dev = process.env.OWNER_PHONE || "916297935330"
+global.dev = process.env.OWNER_PHONE || "919734454665"
 global.creatorName = "☠︎︎ 𓆩𝑺𝒉𝒂𝒅𝒐𝒘 𝑶𝒇𝒇𝒊𝒄𝒊𝒂𝒍𓆪 ☠︎︎'"
 global.footer = process.env.BOT_NAME || "𝗫 𝗥𝗢𝗠𝗘𝗢 𝗠𝗗 🍒💋" //footer section
 global.link = "https://whatsapp.com/channel/120363408770711982"
@@ -34,7 +34,7 @@ global.thumbnail = 'https://raw.githubusercontent.com/romeo005566/x-romro/main/m
 global.richpp = 'https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg'
 global.packname = "𝐒𝐓𝐈𝐂𝐊𝐄𝐑𝐒 𖣘♔︎"
 global.author = "༒︎ 𝑺𝑯𝑨𝑫𝑶𝑾 ༒︎"
-global.creator = `${process.env.OWNER_PHONE || '916297935330'}@s.whatsapp.net`
+global.creator = `${process.env.OWNER_PHONE || '919734454665'}@s.whatsapp.net`
 global.ownername = process.env.OWNER_NAME || '⤹𝐗 𝐑𝐎𝐌𝐄𝐎𓂃༊' 
 global.onlyowner = `☠️ 𝙎𝙤𝙧𝙧𝙮, 𝙏𝙝𝙞𝙨 𝙁𝙚𝙖𝙩𝙪𝙧𝙚 𝙄𝙨 𝙍𝙚𝙨𝙩𝙧𝙞𝙘𝙩𝙚𝙙 𝙏𝙤 𝙊𝙬𝙣𝙚𝙧𝙨 𝙊𝙣𝙡𝙮.  
 🩸 𝘾𝙤𝙣𝙩𝙖𝙘𝙩 *SHADOW* 𝙩𝙤 𝙜𝙖𝙞𝙣 𝙤𝙬𝙣𝙚𝙧 𝙥𝙧𝙞𝙫𝙞𝙡𝙚𝙜𝙚𝙨.  

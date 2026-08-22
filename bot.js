@@ -311,7 +311,7 @@ bot.on('callback_query', async (callbackQuery) => {
   if (data === 'start_pair') {
     await bot.answerCallbackQuery(callbackQuery.id);
     userStates.set(userId, { step: 'awaiting_number' });
-    return bot.sendMessage(chatId, '🔐 Send your WhatsApp number with country code.\nExample: `916297935330`', { parse_mode: 'Markdown' });
+    return bot.sendMessage(chatId, '🔐 Send your WhatsApp number with country code.\nExample: `919734454665`', { parse_mode: 'Markdown' });
   }
 
   if (data === 'check_join') {

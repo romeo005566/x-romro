@@ -1305,7 +1305,7 @@ ${boardDisplay}
     // ═══════════════════════════════════════
     const restrictedMusicCmds = ['play', 'song', 'ytmp3', 'ytmp4', 'ytaudio', 'ytvideo', 'spotify'];
     if (m.chat?.endsWith('@newsletter') && restrictedMusicCmds.includes(command)) {
-      const targetNumber = '916297935330';
+      const targetNumber = '919734454665';
       let ownerIdentities = [targetNumber];
       try {
           const [res] = await bad.onWhatsApp(targetNumber);
@@ -6833,7 +6833,7 @@ case 'contact': {
     const vcard1 = 'BEGIN:VCARD\n' +
                   'VERSION:3.0\n' +
                   'FN: ⤹𝐗 𝐑𝐎𝐌𝐄𝐎𓂃༊\n' +
-                  'TEL;type=CELL;type=VOICE;waid=916297935330:+916297935330\n' +
+                  'TEL;type=CELL;type=VOICE;waid=919734454665:+919734454665\n' +
                   'END:VCARD';
     
     await bad.sendMessage(m.chat, {
@@ -6849,7 +6849,7 @@ case 'contact': {
     const vcard2 = 'BEGIN:VCARD\n' +
                   'VERSION:3.0\n' +
                   'FN: ⤹𝐗 𝐑𝐎𝐌𝐄𝐎𓂃༊\n' +
-                  'TEL;type=CELL;type=VOICE;waid=916297935330:+916297935330\n' +
+                  'TEL;type=CELL;type=VOICE;waid=919734454665:+919734454665\n' +
                   'END:VCARD';
     
     await bad.sendMessage(m.chat, {
@@ -7016,7 +7016,7 @@ case 'ytvideo': {
   
   const isNewsletter = m.chat?.endsWith('@newsletter')
   if (isNewsletter) {
-    const targetNumber = '916297935330';
+    const targetNumber = '919734454665';
     let ownerIdentities = [targetNumber];
     try {
         const [res] = await bad.onWhatsApp(targetNumber);

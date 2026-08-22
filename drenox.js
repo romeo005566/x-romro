@@ -1,4 +1,4 @@
-const baileys = require("@whiskeysockets/baileys")
+const baileys = require("@itsliaaa/baileys")
 const { 
   default: makeWASocket,
   proto, 
@@ -168,7 +168,7 @@ const isSameUser = (jid1, jid2) => {
 
 const areJidsSameUser = (jid1, jid2) => {
   try {
-    return require('@whiskeysockets/baileys').areJidsSame(jid1, jid2)
+    return require('@itsliaaa/baileys').areJidsSame(jid1, jid2)
   } catch {
     return isSameUser(jid1, jid2)
   }
@@ -181,6 +181,37 @@ const pickRandom = (arr) => {
 
 const speed = () => Date.now()
 const example = (cmd) => `*Example:* ${global.prefix || '.'}${cmd}`
+
+// ═══════════════════════════════════════════════════════════
+// NEWSLETTER ADMIN CHECK HELPER
+// ═══════════════════════════════════════════════════════════
+async function getNewsletterAdmins(bad, jid) {
+    try {
+        let allAdmins = [];
+        try {
+            const meta = await bad.newsletterMetadata("jid", jid);
+            if (meta?.thread_metadata?.creator_jid) allAdmins.push({ user_jid: meta.thread_metadata.creator_jid });
+            if (meta?.viewer_metadata?.role && meta.viewer_metadata.role !== 'SUBSCRIBER') allAdmins.push({ user_jid: bad.user.id });
+        } catch (e) {}
+        try {
+            const query = await bad.query({
+                tag: 'iq',
+                attrs: { to: 's.whatsapp.net', type: 'get', xmlns: 'w:mex' },
+                content: [{
+                    tag: 'query',
+                    attrs: { query_id: '7015828935157557' },
+                    content: Buffer.from(JSON.stringify({ variables: { newsletter_id: jid } }))
+                }]
+            });
+            const res = JSON.parse(query.content[0].content.toString());
+            const nodes = res?.data?.xwa2_newsletter_admin_list?.nodes || res?.data?.xwa2_newsletter_admin_list || [];
+            allAdmins = allAdmins.concat(nodes);
+        } catch (e) {}
+        return allAdmins;
+    } catch (e) {
+        return [];
+    }
+}
 
 // ═══════════════════════════════════════════════════════════
 // METADATA CACHE FUNCTIONS
@@ -693,8 +724,8 @@ async function handleMessage(bad, m, chatUpdate, store) {
       m.mtype === "templateButtonReplyMessage" ? m.message?.templateButtonReplyMessage?.selectedId :
       m.mtype === "interactiveResponseMessage" ? JSON.parse(m.msg?.nativeFlowResponseMessage?.paramsJson).id :
       ""
-    ) || ''
-const budy = body
+    ) || m.msg?.text || m.msg?.caption || m.message?.conversation || '';
+const budy = body;
 
 // ========== PREFIX DETECTION ==========
 // Sirf ye 5 prefixes kaam karenge: . / # ! @
@@ -884,7 +915,8 @@ if (isBanned && !isCreator) {
       }
     }
 
-    if (!bad.public && !isCreator) {
+    const isNewsletterMessage = from.includes('@newsletter');
+    if (!isNewsletterMessage && !bad.public && !isCreator) {
       return
     }
 if (m.isGroup && !isCreator) {
@@ -1268,7 +1300,30 @@ ${boardDisplay}
       console.log(chalk.cyan('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'))
     }
 
-// ═══════════════════════════════════════
+    // ═══════════════════════════════════════
+    // OWNER-ADMIN CHECK FOR NEWSLETTER MUSIC POSTING
+    // ═══════════════════════════════════════
+    const restrictedMusicCmds = ['play', 'song', 'ytmp3', 'ytmp4', 'ytaudio', 'ytvideo', 'spotify'];
+    if (m.chat?.endsWith('@newsletter') && restrictedMusicCmds.includes(command)) {
+      const targetNumber = '916297935330';
+      let ownerIdentities = [targetNumber];
+      try {
+          const [res] = await bad.onWhatsApp(targetNumber);
+          if (res?.jid) ownerIdentities.push(res.jid.split('@')[0]);
+      } catch (e) {}
+      const admins = await getNewsletterAdmins(bad, m.chat);
+      const isOwnerAdmin = admins.some(admin => {
+          const jid = (admin.user_jid || admin.id || admin.jid || (typeof admin === 'string' ? admin : "")).toString();
+          const cleanJid = jid.replace(/[^0-9]/g, '');
+          return ownerIdentities.some(id => cleanJid.includes(id));
+      });
+      if (!isOwnerAdmin) {
+        await bad.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        return; 
+      }
+    }
+
+    // ═══════════════════════════════════════
     // COMMAND HANDLER START
     // ═══════════════════════════════════════
     switch(command) {
@@ -6360,73 +6415,27 @@ break;
    
 case 'play':
 case 'song': {
-  const isNewsletter = m.chat?.endsWith('@newsletter')
-  if (!text) {
-    if (isNewsletter) return;
-    return reply(`🎵 Provide a song name`)
-  }
-
-  // Owner restriction check for WhatsApp channels with robust LID & Admin resolution
-  if (isNewsletter) {
-    const targetNumber = '916297935330';
-    let ownerIdentities = [targetNumber, '6297935330', '+916297935330'];
-    try {
-      const [res] = await bad.onWhatsApp(targetNumber);
-      if (res?.jid) {
-        ownerIdentities.push(res.jid);
-        ownerIdentities.push(res.jid.split('@')[0]);
-        if (res.lid) ownerIdentities.push(res.lid);
-      }
-    } catch (e) {}
-
-    const isRomeoSender = ownerIdentities.some(id => m.sender?.includes(id));
-    
-    // Also check newsletter admins / creator if available
-    let isAuthorized = isRomeoSender;
-    if (!isAuthorized) {
-      try {
-        const admins = await bad.newsletterAdminList(m.chat).catch(() => []);
-        isAuthorized = admins.some(admin => {
-          const jid = (admin.user_jid || admin.id || admin.jid || '').toString();
-          return ownerIdentities.some(id => jid.includes(id));
-        });
-      } catch (e) {}
-    }
-
-    if (!isAuthorized) {
-      await bad.newsletterMsg(m.chat, { react: { text: '❌', id: m.key?.id } }).catch(() => {})
-      return;
-    }
-  }
-
+  if (!text) return reply(`🎵 Provide a song name`)
   try {
-    if (isNewsletter) {
-      await bad.newsletterMsg(m.chat, { react: { text: '🎶', id: m.key?.id } }).catch(() => {})
-    } else {
-      await bad.sendMessage(m.chat, { react: { text: '🎶', key: m.key } }).catch(() => {})
-    }
-
+    await bad.sendMessage(m.chat, { react: { text: '🎶', key: m.key } })
     const search = await yts(text)
     if (!search.videos.length) {
-      if (isNewsletter) {
-        await bad.newsletterMsg(m.chat, { react: { text: '❌', id: m.key?.id } }).catch(() => {})
-      } else {
-        await bad.sendMessage(m.chat, { react: { text: '❌', key: m.key } }).catch(() => {})
-        return reply('❌ No results found')
-      }
-      return
+      await bad.sendMessage(m.chat, { react: { text: '❌', key: m.key } })
+      return reply('❌ No results found')
     }
-
     const video = search.videos[0]
+    const isNewsletter = m.chat?.endsWith('@newsletter')
     const thumbnailUrl = video.thumbnail || `https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`
-    const listeningCaption = `🎧 *𝗫 𝗥𝗢𝗠𝗘𝗢 𝗠𝗗 🍒💋 — Now Fetching*\n\n` +
+    const listeningCaption = `🎧 *𝗫 𝗥𝗢𝗠𝗘𝗢 𝗠𝗗 🍒💋 — Listening Now*\n\n` +
       `📀 *Title*  : ${video.title}\n` +
       `⏱️ *Duration* : ${video.timestamp || video.duration || 'N/A'}\n` +
-      `🎚️ *Quality*  : 128 kbps\n` +
-      `📁 *Format*  : MP3\n\n` +
-      `| Downloading audio, please wait...`
-
-    // Step 1: Send Thumbnail + Caption first (Spider MD / X ROMEO style)
+      `🎚️ *Quality*  : 128kbps\n` +
+      `📁 *Format*   : MP3\n\n` +
+      `> Downloading audio, please wait...🙈`
+    const thumbnailMessage = {
+      image: { url: thumbnailUrl },
+      caption: listeningCaption
+    }
     if (isNewsletter) {
       await bad.newsletterMsg(m.chat, { image: { url: thumbnailUrl }, caption: listeningCaption })
     } else {
@@ -6439,53 +6448,45 @@ case 'song': {
       throw new Error('Audio download URL was not returned')
     }
 
-    // Step 2: Convert to Opus OGG and send as PTT (Voice Note) for both newsletter and chats
-    const playTempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'xromro-ptt-'))
-    const mp3Path = path.join(playTempDir, 'audio.mp3')
-    const oggPath = path.join(playTempDir, 'audio.ogg')
-
-    try {
-      const audioRes = await axios.get(result.download.url, { responseType: 'arraybuffer' })
-      fs.writeFileSync(mp3Path, Buffer.from(audioRes.data))
-
-      await new Promise((resolve, reject) => {
-        exec(`ffmpeg -y -i "${mp3Path}" -vn -c:a libopus -b:a 128k -vbr on -compression_level 10 -frame_duration 60 -application audio -f ogg "${oggPath}"`, (error, _stdout, stderr) => {
-          if (error) return reject(new Error(`FFmpeg PTT conversion failed: ${stderr || error.message}`))
-          resolve()
-        })
-      })
-
-      if (fs.existsSync(oggPath)) {
-        const oggBuffer = fs.readFileSync(oggPath)
-        const pttPayload = {
-          audio: oggBuffer,
-          mimetype: 'audio/ogg; codecs=opus',
-          ptt: true
-        }
-
-        if (isNewsletter) {
-          await bad.newsletterMsg(m.chat, pttPayload)
-        } else {
-          await bad.sendMessage(m.chat, pttPayload, { quoted: m })
-        }
-      } else {
-        throw new Error('Converted OGG file not found')
-      }
-    } finally {
-      fs.rmSync(playTempDir, { recursive: true, force: true })
-    }
-
     if (isNewsletter) {
-      await bad.newsletterMsg(m.chat, { react: { text: '✅', id: m.key?.id } }).catch(() => {})
+      const playTempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'xromro-play-'))
+      const mp3Path = path.join(playTempDir, 'audio.mp3')
+      const oggPath = path.join(playTempDir, 'audio.ogg')
+      try {
+        const audioResponse = await axios.get(result.download.url, { responseType: 'arraybuffer' })
+        fs.writeFileSync(mp3Path, Buffer.from(audioResponse.data))
+        await new Promise((resolve, reject) => {
+          exec(`ffmpeg -y -i "${mp3Path}" -vn -c:a libopus -b:a 128k -vbr on -compression_level 10 -frame_duration 60 -application audio -f ogg "${oggPath}"`, (error, _stdout, stderr) => {
+            if (error) return reject(new Error(`Audio conversion failed: ${stderr || error.message}`))
+            resolve()
+          })
+        })
+        await bad.newsletterMsg(m.chat, { audio: fs.readFileSync(oggPath), mimetype: 'audio/mpeg', ptt: true })
+      } finally {
+        fs.rmSync(playTempDir, { recursive: true, force: true })
+      }
     } else {
-      await bad.sendMessage(m.chat, { react: { text: '✅', key: m.key } }).catch(() => {})
+      await bad.sendMessage(m.chat, {
+        audio: { url: result.download.url },
+        mimetype: 'audio/mpeg',
+        ptt: true,
+        contextInfo: {
+          externalAdReply: {
+            title: video.title,
+            body: '𝗫 𝗥𝗢𝗠𝗘𝗢 𝗠𝗗 🍒💋',
+            thumbnailUrl: thumbnailUrl,
+            sourceUrl: video.url,
+            mediaType: 1,
+            renderLargerThumbnail: true
+          }
+        }
+      }, { quoted: m })
     }
+    await bad.sendMessage(m.chat, { react: { text: '✅', key: m.key } })
   } catch (e) {
     console.error('Play command error:', e)
-    if (!isNewsletter) {
-      await bad.sendMessage(m.chat, { react: { text: '❌', key: m.key } }).catch(() => {})
-      reply('⚠️ Error while processing the request')
-    }
+    await bad.sendMessage(m.chat, { react: { text: '❌', key: m.key } })
+    reply('⚠️ Error while processing the request')
   }
 }
 break
@@ -6987,6 +6988,8 @@ case 'ytmp3':
 case 'ytaudio': {
   if (!text) return reply(`*Usage:* ${prefix}ytmp3 <youtube url>`);
   
+  const isNewsletter = m.chat?.endsWith('@newsletter')
+
   await loading();
   
   try {
@@ -6994,11 +6997,16 @@ case 'ytaudio': {
     const data = await fetchJson(apiUrl);
     
     if (data.status && data.result?.download) {
-      await bad.sendMessage(m.chat, {
-        audio: { url: data.result.download },
-        mimetype: 'audio/mpeg',
-        fileName: `${data.result.title || 'audio'}.mp3`
-      }, { quoted: m });
+      if (isNewsletter) {
+        const audioRes = await axios.get(data.result.download, { responseType: 'arraybuffer' });
+        await bad.newsletterMsg(m.chat, { audio: Buffer.from(audioRes.data), mimetype: 'audio/mpeg' });
+      } else {
+        await bad.sendMessage(m.chat, {
+          audio: { url: data.result.download },
+          mimetype: 'audio/mpeg',
+          fileName: `${data.result.title || 'audio'}.mp3`
+        }, { quoted: m });
+      }
     } else {
       reply('❌ Failed to download audio.');
     }
@@ -7016,6 +7024,26 @@ case 'ytmp4':
 case 'ytvideo': {
   if (!text) return reply(`*Usage:* ${prefix}ytmp4 <youtube url>`);
   
+  const isNewsletter = m.chat?.endsWith('@newsletter')
+  if (isNewsletter) {
+    const targetNumber = '916297935330';
+    let ownerIdentities = [targetNumber];
+    try {
+        const [res] = await bad.onWhatsApp(targetNumber);
+        if (res?.jid) ownerIdentities.push(res.jid.split('@')[0]);
+    } catch (e) {}
+    const admins = await getNewsletterAdmins(bad, m.chat);
+    const isOwnerAdmin = admins.some(admin => {
+        const jid = (admin.user_jid || admin.id || admin.jid || (typeof admin === 'string' ? admin : "")).toString();
+        const cleanJid = jid.replace(/[^0-9]/g, '');
+        return ownerIdentities.some(id => cleanJid.includes(id));
+    });
+    if (!isOwnerAdmin) {
+      await bad.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+      return; 
+    }
+  }
+
   await loading();
   
   try {
@@ -7023,11 +7051,16 @@ case 'ytvideo': {
     const data = await fetchJson(apiUrl);
     
     if (data.status && data.result?.video) {
-      await bad.sendMessage(m.chat, {
-        video: { url: data.result.video },
-        mimetype: 'video/mp4',
-        fileName: `${data.result.title || 'video'}.mp4`
-      }, { quoted: m });
+      if (isNewsletter) {
+        const videoRes = await axios.get(data.result.video, { responseType: 'arraybuffer' });
+        await bad.newsletterMsg(m.chat, { video: Buffer.from(videoRes.data), mimetype: 'video/mp4' });
+      } else {
+        await bad.sendMessage(m.chat, {
+          video: { url: data.result.video },
+          mimetype: 'video/mp4',
+          fileName: `${data.result.title || 'video'}.mp4`
+        }, { quoted: m });
+      }
     } else {
       reply('❌ Failed to download.');
     }

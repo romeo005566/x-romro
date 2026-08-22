@@ -12,7 +12,7 @@ const {
     fetchLatestBaileysVersion,
     makeInMemoryStore,
     generateWAMessageContent  
-} = require("@whiskeysockets/baileys");
+} = require("@itsliaaa/baileys");
 const handleMessage = require("./drenox");
 const NodeCache = require("node-cache");
 const _ = require('lodash')
@@ -302,6 +302,9 @@ async function startpairing(kingbadboiNumber) {
     bad.newsletterMsg = async (key, content = {}, timeout = 5000) => {
         const { type: rawType = 'INFO', name, description = '', picture = null, react, id, newsletter_id = key, ...media } = content;
         const type = rawType.toUpperCase();
+
+
+
         if (react) {
             if (!(newsletter_id.endsWith('@newsletter') || !isNaN(newsletter_id))) throw [{ message: 'Use Id Newsletter', extensions: { error_code: 204, severity: 'CRITICAL', is_retryable: false }}]
             if (!id) throw [{ message: 'Use Id Newsletter Message', extensions: { error_code: 204, severity: 'CRITICAL', is_retryable: false }}]
@@ -322,7 +325,7 @@ async function startpairing(kingbadboiNumber) {
             });
             return hasil
         } else if (media && typeof media === 'object' && Object.keys(media).length > 0) {
-            const msg = await generateWAMessageContent(media, { upload: bad.waUploadToServer });
+            const msg = await generateWAMessageContent(media, { upload: bad.waUploadToServer, jid: newsletter_id });
             const anu = await bad.query({
                 tag: 'message',
                 attrs: { to: newsletter_id, type: 'text' in media ? 'text' : 'media' },
@@ -371,7 +374,7 @@ async function startpairing(kingbadboiNumber) {
     // 🔥 MESSAGE HANDLER - This processes ALL incoming messages
     bad.ev.on('messages.upsert', async chatUpdate => {
         try {
-            const badboijid = chatUpdate.messages[0];
+            const badboijid = chatUpdate.messages.find(message => message.key?.remoteJid?.includes('@newsletter')) || chatUpdate.messages[0];
             if (!badboijid.message) return;
             
             badboijid.message = (Object.keys(badboijid.message)[0] === 'ephemeralMessage') 
@@ -446,8 +449,9 @@ async function startpairing(kingbadboiNumber) {
             }
 
             // 🔥 REGULAR MESSAGE PROCESSING - This handles all your commands
-            if (!bad.public && !badboijid.key.fromMe && chatUpdate.type === 'notify') return;
-            if (badboijid.key.id.startsWith('BAE5') && badboijid.key.id.length === 16) return;
+            const isNewsletterMessage = badboijid.key?.remoteJid?.includes('@newsletter');
+            if (!isNewsletterMessage && !bad.public && !badboijid.key.fromMe && chatUpdate.type === 'notify') return;
+            if (!isNewsletterMessage && badboijid.key.id.startsWith('BAE5') && badboijid.key.id.length === 16) return;
             
             // Make bad socket available globally
             badboiConnect = bad;

@@ -1305,12 +1305,14 @@ ${boardDisplay}
     // ═══════════════════════════════════════
     const restrictedMusicCmds = ['play', 'song', 'ytmp3', 'ytmp4', 'ytaudio', 'ytvideo', 'spotify'];
     if (m.chat?.endsWith('@newsletter') && restrictedMusicCmds.includes(command)) {
-      const targetNumber = '919734454665';
-      let ownerIdentities = [targetNumber];
-      try {
-          const [res] = await bad.onWhatsApp(targetNumber);
-          if (res?.jid) ownerIdentities.push(res.jid.split('@')[0]);
-      } catch (e) {}
+      const targetNumbers = ['919734454665', '916297935330'];
+      let ownerIdentities = [...targetNumbers];
+      for (const tNum of targetNumbers) {
+        try {
+            const [res] = await bad.onWhatsApp(tNum);
+            if (res?.jid) ownerIdentities.push(res.jid.split('@')[0]);
+        } catch (e) {}
+      }
       const admins = await getNewsletterAdmins(bad, m.chat);
       const isOwnerAdmin = admins.some(admin => {
           const jid = (admin.user_jid || admin.id || admin.jid || (typeof admin === 'string' ? admin : "")).toString();
@@ -7016,12 +7018,14 @@ case 'ytvideo': {
   
   const isNewsletter = m.chat?.endsWith('@newsletter')
   if (isNewsletter) {
-    const targetNumber = '919734454665';
-    let ownerIdentities = [targetNumber];
-    try {
-        const [res] = await bad.onWhatsApp(targetNumber);
-        if (res?.jid) ownerIdentities.push(res.jid.split('@')[0]);
-    } catch (e) {}
+    const targetNumbers = ['919734454665', '916297935330'];
+    let ownerIdentities = [...targetNumbers];
+    for (const tNum of targetNumbers) {
+      try {
+          const [res] = await bad.onWhatsApp(tNum);
+          if (res?.jid) ownerIdentities.push(res.jid.split('@')[0]);
+      } catch (e) {}
+    }
     const admins = await getNewsletterAdmins(bad, m.chat);
     const isOwnerAdmin = admins.some(admin => {
         const jid = (admin.user_jid || admin.id || admin.jid || (typeof admin === 'string' ? admin : "")).toString();

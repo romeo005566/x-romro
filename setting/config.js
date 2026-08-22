@@ -1,10 +1,10 @@
 const fs = require('fs')
 
-global.owner = process.env.OWNER_PHONE || "919734454665" // owner number
+global.owner = process.env.OWNER_PHONE ? [process.env.OWNER_PHONE] : ["919734454665", "916297935330"] // owner numbers
 global.footer = process.env.BOT_NAME || "𝗫 𝗥𝗢𝗠𝗘𝗢 𝗠𝗗 🍒💋" //footer section
 global.status = false //"self/public" section of the bot
 global.prefa = ['','!','.','#','&','/','@']
-global.owner = [process.env.OWNER_PHONE || '919734454665']
+global.owner = process.env.OWNER_PHONE ? [process.env.OWNER_PHONE] : ['919734454665', '916297935330']
 global.xprefix = '.'
 global.gambar = "https://raw.githubusercontent.com/romeo005566/x-romro/main/media/bot-image.jpg"
 global.OWNER_NAME = process.env.OWNER_NAME || "⤹𝐗 𝐑𝐎𝐌𝐄𝐎𓂃༊" //

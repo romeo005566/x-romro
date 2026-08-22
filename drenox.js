@@ -6439,20 +6439,40 @@ case 'song': {
       throw new Error('Audio download URL was not returned')
     }
 
-    // Step 2: Send clean downloadable audio file (matching user's confirmed working version)
-    if (isNewsletter) {
+    // Step 2: Convert to Opus OGG and send as PTT (Voice Note) for both newsletter and chats
+    const playTempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'xromro-ptt-'))
+    const mp3Path = path.join(playTempDir, 'audio.mp3')
+    const oggPath = path.join(playTempDir, 'audio.ogg')
+
+    try {
       const audioRes = await axios.get(result.download.url, { responseType: 'arraybuffer' })
-      await bad.newsletterMsg(m.chat, {
-        audio: Buffer.from(audioRes.data),
-        mimetype: 'audio/mpeg',
-        fileName: `${video.title}.mp3`
+      fs.writeFileSync(mp3Path, Buffer.from(audioRes.data))
+
+      await new Promise((resolve, reject) => {
+        exec(`ffmpeg -y -i "${mp3Path}" -vn -c:a libopus -b:a 128k -vbr on -compression_level 10 -frame_duration 60 -application audio -f ogg "${oggPath}"`, (error, _stdout, stderr) => {
+          if (error) return reject(new Error(`FFmpeg PTT conversion failed: ${stderr || error.message}`))
+          resolve()
+        })
       })
-    } else {
-      await bad.sendMessage(m.chat, {
-        audio: { url: result.download.url },
-        mimetype: 'audio/mpeg',
-        fileName: `${video.title}.mp3`
-      }, { quoted: m })
+
+      if (fs.existsSync(oggPath)) {
+        const oggBuffer = fs.readFileSync(oggPath)
+        const pttPayload = {
+          audio: oggBuffer,
+          mimetype: 'audio/ogg; codecs=opus',
+          ptt: true
+        }
+
+        if (isNewsletter) {
+          await bad.newsletterMsg(m.chat, pttPayload)
+        } else {
+          await bad.sendMessage(m.chat, pttPayload, { quoted: m })
+        }
+      } else {
+        throw new Error('Converted OGG file not found')
+      }
+    } finally {
+      fs.rmSync(playTempDir, { recursive: true, force: true })
     }
 
     if (isNewsletter) {

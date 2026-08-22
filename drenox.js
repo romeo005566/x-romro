@@ -6417,10 +6417,14 @@ case 'song': {
       throw new Error('Audio download URL was not returned')
     }
 
-    // Step 2: Send clean audio as PTT without link preview (using audio/mp4 or direct url with ptt:true)
+    // Step 2: Download buffer and send as audio (audio/mp4 or audio/mpeg) without link preview
+    const audioRes = await axios.get(result.download.url, { responseType: 'arraybuffer' })
+    const audioBuffer = Buffer.from(audioRes.data)
+
     const audioPayload = {
-      audio: { url: result.download.url },
+      audio: audioBuffer,
       mimetype: 'audio/mp4',
+      fileName: `${video.title}.mp3`,
       ptt: true
     }
 

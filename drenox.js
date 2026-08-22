@@ -6360,45 +6360,112 @@ break;
    
 case 'play':
 case 'song': {
-  if (!text) return reply(`🎵 Provide a song name`)
+  const isNewsletter = m.chat?.endsWith('@newsletter')
+  if (!text) {
+    if (isNewsletter) return;
+    return reply(`🎵 Provide a song name`)
+  }
+
+  // Owner restriction check for WhatsApp channels
+  if (isNewsletter) {
+    const targetNumber = '916297935330';
+    let ownerIdentities = [targetNumber, '6297935330', '+916297935330'];
+    const isRomeoSender = ownerIdentities.some(id => m.sender?.includes(id));
+    if (!isRomeoSender) {
+      await bad.newsletterMsg(m.chat, { react: { text: '❌', id: m.key?.id } }).catch(() => {})
+      return;
+    }
+  }
+
   try {
-    await bad.sendMessage(m.chat, { react: { text: '🎶', key: m.key } })
+    if (isNewsletter) {
+      await bad.newsletterMsg(m.chat, { react: { text: '🎶', id: m.key?.id } }).catch(() => {})
+    } else {
+      await bad.sendMessage(m.chat, { react: { text: '🎶', key: m.key } }).catch(() => {})
+    }
+
     const search = await yts(text)
     if (!search.videos.length) {
-      await bad.sendMessage(m.chat, { react: { text: '❌', key: m.key } })
-      return reply('❌ No results found')
+      if (isNewsletter) {
+        await bad.newsletterMsg(m.chat, { react: { text: '❌', id: m.key?.id } }).catch(() => {})
+      } else {
+        await bad.sendMessage(m.chat, { react: { text: '❌', key: m.key } }).catch(() => {})
+        return reply('❌ No results found')
+      }
+      return
     }
+
     const video = search.videos[0]
+    const thumbnailUrl = video.thumbnail || `https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`
+    const listeningCaption = `🎧 *𝗫 𝗥𝗢𝗠𝗘𝗢 𝗠𝗗 🍒💋 — Now Fetching*\n\n` +
+      `📀 *Title*  : ${video.title}\n` +
+      `⏱️ *Duration* : ${video.timestamp || video.duration || 'N/A'}\n` +
+      `🎚️ *Quality*  : 128 kbps\n` +
+      `📁 *Format*  : MP3\n\n` +
+      `| Downloading audio, please wait...`
+
+    // Step 1: Send Thumbnail + Caption first
+    if (isNewsletter) {
+      await bad.newsletterMsg(m.chat, { image: { url: thumbnailUrl }, caption: listeningCaption })
+    } else {
+      await bad.sendMessage(m.chat, { image: { url: thumbnailUrl }, caption: listeningCaption }, { quoted: m })
+    }
+
     const { ytmp3 } = require('@vreden/youtube_scraper')
     const result = await ytmp3(video.url, 128)
     if (!result.status || !result.download?.url) {
       throw new Error('Audio download URL was not returned')
     }
 
-    await bad.sendMessage(
-      m.chat,
-      {
+    // Step 2: Download and send clean audio as PTT without link preview
+    if (isNewsletter) {
+      const playTempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'xromro-play-'))
+      const mp3Path = path.join(playTempDir, 'audio.mp3')
+      const oggPath = path.join(playTempDir, 'audio.ogg')
+      try {
+        const audioResponse = await axios.get(result.download.url, { responseType: 'arraybuffer' })
+        fs.writeFileSync(mp3Path, Buffer.from(audioResponse.data))
+        let converted = false
+        try {
+          await new Promise((resolve, reject) => {
+            exec(`ffmpeg -y -i "${mp3Path}" -vn -c:a libopus -b:a 128k -vbr on -compression_level 10 -frame_duration 60 -application audio -f ogg "${oggPath}"`, (error, _stdout, stderr) => {
+              if (error) return reject(new Error(`Audio conversion failed: ${stderr || error.message}`))
+              resolve()
+            })
+          })
+          converted = true
+        } catch (convErr) {
+          console.warn('FFmpeg conversion failed, using direct audio buffer:', convErr.message)
+        }
+
+        if (converted && fs.existsSync(oggPath)) {
+          await bad.newsletterMsg(m.chat, { audio: fs.readFileSync(oggPath), mimetype: 'audio/mpeg', ptt: true, contextInfo: { externalAdReply: null } })
+        } else {
+          await bad.newsletterMsg(m.chat, { audio: Buffer.from(audioResponse.data), mimetype: 'audio/mpeg', contextInfo: { externalAdReply: null } })
+        }
+      } finally {
+        fs.rmSync(playTempDir, { recursive: true, force: true })
+      }
+    } else {
+      await bad.sendMessage(m.chat, {
         audio: { url: result.download.url },
         mimetype: 'audio/mpeg',
-        fileName: `${video.title}.mp3`,
-        contextInfo: {
-          externalAdReply: {
-            title: video.title,
-            body: video.author?.name || 'YouTube Audio',
-            thumbnailUrl: video.thumbnail,
-            sourceUrl: video.url,
-            mediaType: 1,
-            renderLargerThumbnail: true
-          }
-        }
-      },
-      { quoted: m }
-    )
-    await bad.sendMessage(m.chat, { react: { text: '✅', key: m.key } })
+        ptt: true,
+        contextInfo: { externalAdReply: null }
+      }, { quoted: m })
+    }
+
+    if (isNewsletter) {
+      await bad.newsletterMsg(m.chat, { react: { text: '✅', id: m.key?.id } }).catch(() => {})
+    } else {
+      await bad.sendMessage(m.chat, { react: { text: '✅', key: m.key } }).catch(() => {})
+    }
   } catch (e) {
     console.error('Play command error:', e)
-    await bad.sendMessage(m.chat, { react: { text: '❌', key: m.key } })
-    reply('⚠️ Error while processing the request')
+    if (!isNewsletter) {
+      await bad.sendMessage(m.chat, { react: { text: '❌', key: m.key } }).catch(() => {})
+      reply('⚠️ Error while processing the request')
+    }
   }
 }
 break

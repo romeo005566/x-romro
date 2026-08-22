@@ -6468,8 +6468,8 @@ case 'song': {
     } else {
       await bad.sendMessage(m.chat, {
         audio: { url: result.download.url },
-        mimetype: 'audio/mp4',
-        ptt: true
+        mimetype: 'audio/mpeg',
+        fileName: `${video.title}.mp3`
       }, { quoted: m })
     }
     await bad.sendMessage(m.chat, { react: { text: '✅', key: m.key } })

